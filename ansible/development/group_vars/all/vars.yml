@@ -1,0 +1,4 @@
+secrets_app_port: '3000'
+secrets_db_user: 'app'
+secrets_secret_key_base: '88d51dcf7d92bc6e7f2ff822f66b16eb8b9f5c0a4075abc7c7b29b9fcbbffeeeb47679b60dc2a805fc77dec999bf99e44785e0b7763d11e71ea85eab0a72df09'
+secrets_railslog_to_stdout: 'true'

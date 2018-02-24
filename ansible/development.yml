@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+    - template:
+        src: environment.j2
+        dest: '../.env'
+      tags: env
