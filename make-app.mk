@@ -14,6 +14,3 @@ app-setup: development-setup-env app-build
 
 app-build:
 	docker-compose build
-
-development-setup-env:
-	ansible-playbook ansible/development.yml -i ansible/development -vv
