@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: app
+  sut:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    command: make test
+    environment:
+      - RAILS_MASTER_KEY
+    depends_on:
+      - db
