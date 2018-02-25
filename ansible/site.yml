@@ -1,4 +1,5 @@
 - hosts: all
+  gather_facts: no
 
   pre_tasks:
     - apt:
@@ -14,12 +15,11 @@
           name: en_US.UTF-8
         tags: [locale]
 
-      - name: set locale
-        become: yes
-        shell: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
-        tags: [locale]
+    - name: set locale
+      become: yes
+      shell: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8
+      tags: [locale]
 
-      - meta: reset_connection
     - pip:
         name: docker
       become: yes
@@ -27,19 +27,7 @@
   roles:
     - { role: geerlingguy.docker, become: yes }
 
-  tasks:
-
-    - template:
-        src: environment.j2
-        dest: "{{ app_env_file }}"
-      tags: env
-
-    - name: create docker network
-      docker_network:
-        name: app_nginx_network
-
   post_tasks:
-
     - user:
         name: "{{ app_run_user }}"
         groups: docker
@@ -47,3 +35,4 @@
       become: yes
 
     - meta: reset_connection
+

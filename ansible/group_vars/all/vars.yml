@@ -1,0 +1,13 @@
+ansible_python_interpreter: "/usr/bin/env python3"
+
+rails_log_to_stdout: true
+
+app_image_name: "inemation/workshop-devops-app"
+app_nginx_image_name: "inemation/workshop-devops-nginx"
+app_port: 8080
+app_server_name: temp.tabsqueeze.com
+app_aws_region: us-east-1
+
+docker_install_compose: no
+docker_package_state: latest
+

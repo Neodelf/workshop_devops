@@ -1,0 +1,108 @@
+---
+- hosts: all
+  gather_facts: no
+  vars_prompt:
+    - name: "devops_demo_image_tag"
+      prompt: "DevOps demo image tag"
+      private: no
+
+  tasks:
+    - set_fact: devops_demo_image_tag={{ devops_demo_image_tag }}
+      tags: always
+
+
+- hosts: ec2
+  gather_facts: no
+  # become: yes
+  # become_user: "{{ devops_demo_run_user }}"
+
+  tasks:
+    - template:
+        src: environment.j2
+        dest: "{{ devops_demo_env_file }}"
+      tags: env
+
+    - name: download image
+      docker_image:
+        name: "{{ devops_demo_image_name }}:{{ devops_demo_image_tag }}"
+        force: yes
+
+    - name: download nginx image
+      docker_image:
+        name: "{{ devops_demo_nginx_image_name }}:latest"
+        force: yes
+
+    - name: run migrations
+      docker_container:
+        recreate: yes
+        detach: no
+        name: devops-demo-migrations
+        command: "bin/rails db:migrate"
+        image: "{{ devops_demo_image_name }}:{{ devops_demo_image_tag }}"
+        state: started
+        env_file: "{{ devops_demo_env_file }}"
+        volumes:
+          - "/tmp:/tmp"
+          - "/var/tmp:/var/tmp"
+      run_once: yes
+      tags: [webserver]
+
+
+    - name: start application
+      docker_container:
+        recreate: yes
+        name: devops-demo-web
+        image: "{{ devops_demo_image_name }}:{{ devops_demo_image_tag }}"
+        state: started
+        # log_driver: awslogs
+        # log_options:
+        #   awslogs-group: "{{ devops_demo_aws_logs_group }}"
+        #   awslogs-stream: "{{ devops_demo_aws_logs_stream_web }}"
+        #   awslogs-region: '{{ devops_demo_aws_region }}'
+        restart_policy: always
+        env_file: "{{ devops_demo_env_file }}"
+        env:
+          RAILS_ENV: production
+          NODE_ENV: production
+        # networks:
+        #   - main
+        ports:
+          - "80:{{ devops_demo_port }}"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "/tmp:/tmp"
+          - "/opt:/opt"
+          - "/var/tmp:/var/tmp"
+      tags: [webserver]
+
+    - name: nginx container
+      docker_container:
+        recreate: yes
+        name: devops-demo-nginx
+        image: "{{ devops_demo_nginx_image_name }}:latest"
+        state: started
+        # log_driver: awslogs
+        log_options:
+          awslogs-group: "{{ devops_demo_aws_logs_group }}"
+          awslogs-stream: "{{ devops_demo_aws_logs_stream_web }}"
+          awslogs-region: '{{ devops_demo_aws_region }}'
+        restart_policy: always
+        env_file: "{{ devops_demo_env_file }}"
+        # networks:
+        #   - main
+        # ports:
+        #   - "80:{{ devops_demo_port }}"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "/tmp:/tmp"
+          - "/opt:/opt"
+          - "/var/tmp:/var/tmp"
+      tags: [webserver]
+
+    - name: create network
+      docker_network:
+        name: {{ devops_demo_docker_network_name }}
+        connected:
+          - devops-demo-web
+          - devops-demo-nginx
+
