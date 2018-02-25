@@ -28,10 +28,10 @@
 
   post_tasks:
     - user:
-        name: "{{ app_run_user }}"
+        name: "{{ run_user }}"
         groups: docker
         append: yes
       become: yes
 
-    - meta: reset_connection
+    #- meta: reset_connection
 
