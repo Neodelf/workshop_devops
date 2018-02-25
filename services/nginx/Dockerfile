@@ -1,4 +1,4 @@
 FROM nginx
 
-COPY neodelf.conf /etc/nginx/conf.d/neodelf.conf
+COPY services/nginx/neodelf.conf /etc/nginx/conf.d/neodelf.conf
 
