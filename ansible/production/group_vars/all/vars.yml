@@ -1,7 +1,7 @@
 secrets_app_port: '3000'
 secrets_db_user: 'postgres'
 db_password: 'postgres'
-db_host: 'testdb.cmu7j0nr912i.us-east-2.rds.amazonaws.com'
+db_host: 'appproduction.cmu7j0nr912i.us-east-2.rds.amazonaws.com'
 db_name: 'app_production'
 
 secrets_secret_key_base: '88d51dcf7d92bc6e7f2ff822f66b16eb8b9f5c0a4075abc7c7b29b9fcbbffeeeb47679b60dc2a805fc77dec999bf99e44785e0b7763d11e71ea85scasv72df09'
