@@ -1,8 +1,8 @@
 secrets_app_port: '3000'
-secrets_db_user: deployer
-db_password: 1101403955
+secrets_db_user: 'postgres'
+db_password: 'postgres'
 db_host: 'testdb.cmu7j0nr912i.us-east-2.rds.amazonaws.com'
-db_name: 'test_instance'
+db_name: 'app_production'
 
 secrets_secret_key_base: '88d51dcf7d92bc6e7f2ff822f66b16eb8b9f5c0a4075abc7c7b29b9fcbbffeeeb47679b60dc2a805fc77dec999bf99e44785e0b7763d11e71ea85scasv72df09'
 secrets_railslog_to_stdout: 'true'
@@ -12,3 +12,5 @@ run_user: ubuntu
 run_user_home: /home/ubuntu
 env_file: "{{ run_user_home }}/.env"
 docker_network_name: main
+
+rails_env: production
