@@ -35,17 +35,13 @@
     - name: run migrations
       docker_container:
         recreate: yes
-        detach: no
-        name: devops-demo-migrations
+        name: app-migrations
         command: "bin/rails db:migrate"
         image: "{{ app_image_name }}:{{ app_image_tag }}"
         state: started
         env_file: "{{ env_file }}"
-        volumes:
-          - "/tmp:/tmp"
-          - "/var/tmp:/var/tmp"
       run_once: yes
-      tags: [webserver]
+      tags: [ec2]
 
 
     - name: start application
@@ -82,12 +78,12 @@
         image: "{{ app_nginx_image_name }}:latest"
         state: started
         # log_driver: awslogs
-        log_options:
-          awslogs-group: "{{ app_aws_logs_group }}"
-          awslogs-stream: "{{ app_aws_logs_stream_web }}"
-          awslogs-region: '{{ app_aws_region }}'
+        #log_options:
+        #  awslogs-group: "{{ app_aws_logs_group }}"
+        #  awslogs-stream: "{{ app_aws_logs_stream_web }}"
+        #  awslogs-region: '{{ app_aws_region }}'
         restart_policy: always
-        env_file: "{{ app_env_file }}"
+        env_file: "{{ env_file }}"
         # networks:
         #   - main
         # ports:
