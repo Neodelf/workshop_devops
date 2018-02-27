@@ -1,4 +1,4 @@
-secrets_app_port: '3000'
+secrets_app_port: '8080'
 secrets_db_user: 'postgres'
 db_password: 'postgres'
 db_host: 'appproduction.cmu7j0nr912i.us-east-2.rds.amazonaws.com'

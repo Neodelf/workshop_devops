@@ -11,7 +11,7 @@
       tags: always
 
 
-- hosts: ec2
+- hosts: webservers
   gather_facts: no
   # become: yes
   # become_user: "{{ app_run_user }}"
@@ -41,7 +41,7 @@
         state: started
         env_file: "{{ env_file }}"
       run_once: yes
-      tags: [ec2]
+      tags: [webservers]
 
 
     - name: start application
@@ -69,7 +69,7 @@
           - "/tmp:/tmp"
           - "/opt:/opt"
           - "/var/tmp:/var/tmp"
-      tags: [webserver]
+      tags: [webservers]
 
     - name: nginx container
       docker_container:
@@ -93,7 +93,7 @@
           - "/tmp:/tmp"
           - "/opt:/opt"
           - "/var/tmp:/var/tmp"
-      tags: [webserver]
+      tags: [webservers]
 
     - name: create network
       docker_network:
